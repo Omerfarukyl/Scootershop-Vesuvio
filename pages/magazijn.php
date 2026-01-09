@@ -1,12 +1,10 @@
 <?php
-
 if (!isset($_SESSION["ID"])) {
     echo "<script>location.href='index.php?page=inloggen';</script>";
     exit();
 }
 
 $melding = "";
-
 
 if (isset($_POST['inpakken'])) {
     $regel_id = $_POST['regel_id'];
@@ -24,8 +22,6 @@ if (isset($_POST['inpakken'])) {
     }
 }
 
-
-
 $sql_filter = "SELECT DISTINCT order_id FROM orderrules WHERE packed = 0";
 $stmt_filter = $verbinding->prepare($sql_filter);
 $stmt_filter->execute(array());
@@ -34,7 +30,6 @@ $open_orders = $stmt_filter->fetchAll(PDO::FETCH_COLUMN);
 if (empty($open_orders)) {
     $order_ids_string = "0";
 } else {
-   
     $order_ids_string = implode(',', $open_orders);
 }
 ?>
@@ -46,9 +41,7 @@ if (empty($open_orders)) {
     <?php if ($melding != "") { echo "<p style='color: green;'>$melding</p>"; } ?>
 
     <?php
-
     if ($order_ids_string != "0") {
-        
         $query = "SELECT orderrules.id as regel_id, orderrules.order_id, orderrules.packed, parts.part 
                   FROM orderrules 
                   INNER JOIN parts ON orderrules.part_id = parts.id 
@@ -57,17 +50,13 @@ if (empty($open_orders)) {
                   
         $stmt = $verbinding->prepare($query);
         $stmt->execute(array());
-        $stmt->setFetchMode(PDO::FETCH_ASSOC); 
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
-
-        $huidige_order = 0;
-        
         echo "<table>";
         echo "<thead><tr><th>Order Nr</th><th>Onderdeel</th><th>Status</th><th>Actie</th></tr></thead>";
         echo "<tbody>";
 
         foreach($stmt as $rij) {
-      
             ?>
             <tr style="<?php if($rij['packed'] == 1) { echo 'background-color: #e6fffa; color: #aaa;'; } ?>">
                 <td><strong>#<?php echo $rij['order_id']; ?></strong></td>

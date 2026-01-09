@@ -1,27 +1,19 @@
 <?php
-// pages/bestellingen.php
-// Onderdeel A: Overzicht van de gedane bestellingen
-
-// Check of de gebruiker is ingelogd
 if (!isset($_SESSION["ID"])) {
     echo "<script>location.href='index.php?page=inloggen';</script>";
     exit();
 }
 
-// Opgave 108 stijl: Query voorbereiden
 $query = "SELECT * FROM orders ORDER BY date DESC";
 $stmt = $verbinding->prepare($query);
 
 try {
-    // Query uitvoeren
-    $stmt->execute(array()); // Lege array omdat we geen parameters hebben
-    
-    // Opgave 108 stijl: Fetch mode instellen
+    $stmt->execute(array());
     $stmt->setFetchMode(PDO::FETCH_ASSOC);
     
 } catch(PDOException $e) {
     echo "<script>alert('Fout bij ophalen bestellingen: " . $e->getMessage() . "');</script>";
-    $stmt = []; // Lege array om fouten in foreach te voorkomen
+    $stmt = [];
 }
 ?>
 
@@ -42,7 +34,6 @@ try {
         </thead>
         <tbody>
             <?php
-            // Opgave 108 stijl: Direct loopen door het statement object
             foreach($stmt as $bestelling) {
                 ?>
                 <tr>

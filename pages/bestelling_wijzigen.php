@@ -1,8 +1,4 @@
 <?php
-
-// Onderdeel A: Bestelling bewerken
-
-
 if (!isset($_GET['id'])) {
     echo "<script>location.href='index.php?page=bestellingen';</script>";
     exit();
@@ -11,9 +7,7 @@ if (!isset($_GET['id'])) {
 $id = $_GET['id'];
 $melding = "";
 
-
 if (isset($_POST['opslaan'])) {
-    
     $query = "UPDATE orders 
               SET recipient = :recipient, 
                   addressline1 = :adres1, 
@@ -22,8 +16,6 @@ if (isset($_POST['opslaan'])) {
               WHERE id = :id";
     
     $update = $verbinding->prepare($query);
-
-   
     $data = array(
         "recipient" => $_POST['recipient'],
         "adres1" => $_POST['addressline1'],
@@ -33,19 +25,13 @@ if (isset($_POST['opslaan'])) {
     );
 
     try {
-       
         $update->execute($data);
-    
         $melding = "Gegevens succesvol opgeslagen!";
     } catch (PDOException $e) {
         $melding = "Fout bij opslaan: " . $e->getMessage();
     }
 }
 
-// DATA OPHALEN
-
-
-//Bestelling gegevens
 $query = "SELECT * FROM orders WHERE id = :id";
 $stmt = $verbinding->prepare($query);
 $stmt->execute(array("id" => $id));
@@ -56,7 +42,6 @@ if (!$bestelling) {
     exit();
 }
 
-// Producten (JOIN)
 $query_prod = "SELECT orderrules.*, parts.part, parts.sell_price 
                FROM orderrules 
                INNER JOIN parts ON orderrules.part_id = parts.id 
@@ -107,7 +92,6 @@ $stmt_prod->setFetchMode(PDO::FETCH_ASSOC);
         </thead>
         <tbody>
             <?php 
-           
             foreach ($stmt_prod as $regel) { ?>
             <tr>
                 <td><?php echo $regel['part']; ?></td>

@@ -7,11 +7,9 @@ if (isset($_POST["submit"])) {
     $melding = "";
 
     try {
-        
         if (!isset($verbinding)) {
             $melding = "Database verbinding niet gevonden.";
         } else {
-           
             $sql = "SELECT * FROM users WHERE username = :user";
             $stmt = $verbinding->prepare($sql);
             $stmt->bindParam(':user', $gebruikersnaam);
@@ -19,15 +17,12 @@ if (isset($_POST["submit"])) {
 
             $gebruiker = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            
             if ($gebruiker && password_verify($wachtwoord, $gebruiker["password"])) {
-                
                 $_SESSION["ID"] = $gebruiker["id"];
                 $_SESSION["USER_NAAM"] = $gebruiker["full_name"];
                 $_SESSION["ROL"] = $gebruiker["role"]; 
                 $_SESSION["STATUS"] = "ACTIEF";
 
-                
                 header("Location: index.php?page=bestellingen");
                 exit();
             } else {
@@ -44,7 +39,6 @@ if (isset($_POST["submit"])) {
     <h1>Inloggen</h1>
     
     <?php 
-    // Foutmelding 
     if (isset($melding) && $melding != "") {
         echo "<p style='color: red;'>" . $melding . "</p>";
     }
